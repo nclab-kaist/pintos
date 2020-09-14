@@ -100,7 +100,7 @@ sub parse_command_line {
 	  or exit 1;
     }
 
-    $sim = "bochs" if !defined $sim;
+    $sim = "qemu" if !defined $sim;
     $debug = "none" if !defined $debug;
     $vga = exists ($ENV{DISPLAY}) ? "window" : "none" if !defined $vga;
 
@@ -621,10 +621,10 @@ sub run_qemu {
     my (@cmd) = ('qemu-system-i386');
     push (@cmd, '-device', 'isa-debug-exit');
 
-    push (@cmd, '-hda', $disks[0]) if defined $disks[0];
-    push (@cmd, '-hdb', $disks[1]) if defined $disks[1];
-    push (@cmd, '-hdc', $disks[2]) if defined $disks[2];
-    push (@cmd, '-hdd', $disks[3]) if defined $disks[3];
+    push (@cmd, '-drive', "file=$disks[0],index=0,media=disk,format=raw") if defined $disks[0];
+    push (@cmd, '-drive', "file=$disks[1],index=1,media=disk,format=raw") if defined $disks[1];
+    push (@cmd, '-drive', "file=$disks[2],index=2,media=disk,format=raw") if defined $disks[2];
+    push (@cmd, '-drive', "file=$disks[3],index=3,media=disk,format=raw") if defined $disks[3];
     push (@cmd, '-m', $mem);
     push (@cmd, '-net', 'none');
     push (@cmd, '-nographic') if $vga eq 'none';
